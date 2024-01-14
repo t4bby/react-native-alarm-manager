@@ -69,10 +69,8 @@ public class AlarmModule extends ReactContextBaseJavaModule {
       @Override
       public void run() {
         Database db = Database.getInstance(getReactApplicationContext());
-        AlarmDto newAlarm = createAlarm(rm, true);
-        AlarmDto existedAlarm = db.alarmDao().search(newAlarm.getAlarmId());
+        AlarmDto newAlarm = createAlarm(rm, false);
 
-        if(existedAlarm==null){
           long alarmId = db.alarmDao().add(newAlarm);
           alarm = db.alarmDao().search((int)alarmId);
 
@@ -114,7 +112,6 @@ public class AlarmModule extends ReactContextBaseJavaModule {
 
           PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(reactContext, alarm.getAlarmId(), alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
           alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmCalender.getTimeInMillis(), alarmPendingIntent);
-        }
       }
     };
 
